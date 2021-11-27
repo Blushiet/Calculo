@@ -1,51 +1,59 @@
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import *
-from matplotlib.figure import Figure
-from matplotlib import style
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import numpy as np
-from math import *
 import tkinter as tk
+from tkinter import ttk, messagebox
 import sympy as s
+from VentanaGrafica import *
 
-def Ventana():
-    raiz = tk.Tk()
-    raiz.geometry("600x500")
-    raiz.title("Calculo Integral UADEC")
-    #Labels
-    IngresarFuncion = tk.Label(raiz, text="Ingrese la función: ", font="Monospaced").place(x = 10, y = 10)
-    LimiteInferior = tk.Label(raiz, text="Limite Inferior: ", font="Monospaced").place(x=10, y=70)
-    LimiteSuperior = tk.Label(raiz, text="Limite Superior: ", font="Monospaced").place(x=10, y=140)
-    EtiquetaRIntegral = tk.Label(raiz, text="Resultado de la integral en funcion:", font="Monospaced").place(x=10, y=255)
-    EtiquetaIntegralD = tk.Label(raiz, text="Resultado de la integral definida:", font="Monospaced").place(x=10, y=325)
-    #Cajas de texto
-    CajaFun = tk.Entry(raiz, font="Monospaced").place(x=225, y=10)
-    CajaLI = tk.Entry(raiz, font="Monospaced").place(x=225, y=70)
-    CajaLS = tk.Entry(raiz, font="Monospaced").place(x=225, y=140)
-    #Botones
-    Calcular = tk.Button(raiz, font="Monospadec", text="Calcular").place(x=120, y=180)
-    Graficar = tk.Button(raiz, font="Monospaced", text="Graficar").place(x=200, y=180)
-    #Resultado
-    ResultadoIntegralFuncion = tk.Text(raiz, font="Monospaced", width=50, height=1).place(x=10, y=280)
-    ResultadoIntegralDefinida = tk.Text(raiz, font="Monospaced", width=50, height=5).place(x=10, y=350)
-    raiz.mainloop()
+import VentanaGrafica.Grafica
+
 
 def Integrar():
-    x = s.symbols('x')
-    fx = s.sin(x)
-    dx = s.Integral(s.sin(x), x).doit()
-    print(dx)
+    if CajaLI.get() != "" and CajaLS.get() != "":
+        ResultadoIntegralFuncion.delete(0, "end")
+        ResultadoIntegralDefinida.delete(0, "end")
+        i = s.symbols('x')
+        fx = CajaFun.get()
+        fx2 = CajaFun.get()
+        LI = float(CajaLI.get())
+        LS = float(CajaLS.get())
+        dx = s.Integral(fx, (i, LI, LS)).doit()
+        dx2 = s.Integral(fx2, i).doit()
+        ResultadoIntegralFuncion.insert(0, dx2)
+        ResultadoIntegralDefinida.insert(0, dx)
+    else:
+        ResultadoIntegralFuncion.delete(0, "end")
+        ResultadoIntegralDefinida.delete(0, "end")
+        x = s.symbols('x')
+        fx = CajaFun.get()
+        dx = s.Integral(fx, x).doit()
+        ResultadoIntegralFuncion.insert(0, dx)
+        print(dx)
 
-def Graficar():
-    fun = {"sin":"np.sin", "cos":"np.cos", "tan":"np.tan", "log":"np.log", "exp":"np.exp", "pi":"np.pi", "sqrt":"np.sqrt"}
 
-    plt.axhline(0, color="black")
-    plt.axvline(0, color="black")
-    plt.xlim(-10, 10);
-    plt.ylim(-10, 10)
-    style.use("fivethirtyeight")
-    plt.grid()
-    plt.show()
+def G():
+    VentanaGrafica.Grafica
 
-Ventana()
-Graficar()
+raiz = tk.Tk()
+raiz.geometry("600x500")
+raiz.title("Calculo Integral UADEC")
+#Labels
+IngresarFuncion = tk.Label(raiz, text="Ingrese la función: ", font="Monospaced").place(x = 10, y = 10)
+LimiteInferior = tk.Label(raiz, text="Limite Inferior: ", font="Monospaced").place(x=10, y=70)
+LimiteSuperior = tk.Label(raiz, text="Limite Superior: ", font="Monospaced").place(x=10, y=140)
+EtiquetaRIntegral = tk.Label(raiz, text="Resultado de la integral en funcion:", font="Monospaced").place(x=10, y=235)
+EtiquetaIntegralD = tk.Label(raiz, text="Resultado de la integral evaluada:", font="Monospaced").place(x=10, y=325)
+#Cajas de texto
+CajaFun = tk.Entry(raiz, font="Monospaced")
+CajaFun.place(x=225, y=10)
+CajaLI = ttk.Entry(raiz, font="Monospaced")
+CajaLI.place(x=225, y=70)
+CajaLS = ttk.Entry(raiz, font="Monospaced")
+CajaLS.place(x=225, y=140)
+#Botones
+Calcular = tk.Button(raiz, font="Monospadec", text="Calcular", command=Integrar).place(x=120, y=180)
+Graficar = tk.Button(raiz, font="Monospaced", text="Graficar", command=G).place(x=200, y=180)
+#ResultadoFuncionesIntegradas
+ResultadoIntegralFuncion = ttk.Entry(raiz, font="Monospaced", width=50)
+ResultadoIntegralFuncion.place(x=10, y=260)
+ResultadoIntegralDefinida = tk.Entry(raiz, font="Monospaced", width=50)
+ResultadoIntegralDefinida.place(x=10, y=350)
+raiz.mainloop()
