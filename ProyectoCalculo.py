@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sympy as s
-from VentanaGrafica import *
 
 import VentanaGrafica.Grafica
+from VentanaGrafica import *
 
+
+def VerVentanaNueva():
+    VentanaGrafica.Grafica.ver()
 
 def Integrar():
     if CajaLI.get() != "" and CajaLS.get() != "":
@@ -29,9 +32,6 @@ def Integrar():
         print(dx)
 
 
-def G():
-    VentanaGrafica.Grafica
-
 raiz = tk.Tk()
 raiz.geometry("600x500")
 raiz.title("Calculo Integral UADEC")
@@ -50,7 +50,7 @@ CajaLS = ttk.Entry(raiz, font="Monospaced")
 CajaLS.place(x=225, y=140)
 #Botones
 Calcular = tk.Button(raiz, font="Monospadec", text="Calcular", command=Integrar).place(x=120, y=180)
-Graficar = tk.Button(raiz, font="Monospaced", text="Graficar", command=G).place(x=200, y=180)
+Graficar = tk.Button(raiz, font="Monospaced", text="Graficar", command=VerVentanaNueva).place(x=200, y=180)
 #ResultadoFuncionesIntegradas
 ResultadoIntegralFuncion = ttk.Entry(raiz, font="Monospaced", width=50)
 ResultadoIntegralFuncion.place(x=10, y=260)
